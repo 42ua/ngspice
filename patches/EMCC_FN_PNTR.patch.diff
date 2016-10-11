@@ -1,0 +1,167 @@
+diff --git a/src/frontend/display.c b/src/frontend/display.c
+index 7db765f..ac02cbd 100644
+--- a/src/frontend/display.c
++++ b/src/frontend/display.c
+@@ -38,18 +38,88 @@ static int nodev(void);
+ #include "hpgl.h"
+ 
+ 
++static int em_i_nop_graph(struct graph * g){
++  return (1); 
++}
++
++static int em_i_nop_i4(int a, int b, int c, int d){
++  return (1); 
++}
++
++static int em_i_nop_i3d2(int a, int b, int c, double d, double e){
++  return (1); 
++}
++
++static int em_i_nop_c1i2(char * a, int b, int c){
++  return (1); 
++}
++
++static int em_i_nop_i1d3(int a, double b, double c, double d){
++  return (1); 
++}
++
++static int em_i_nop_i2(int a, int b){
++  return (1); 
++}
++
++static int em_i_nop_i1(int a){
++  return (1); 
++}
++
++static void em_v_nop_sad3i3(struct graph * a, double b, double c,
++      int * d, int * e){
++}
++
++static int em_i_nodev_i1d3(int a, double b, double c, double d){
++    return nodev();
++}
++
++static int em_i_nodev_i2(int a, int b){
++  return nodev();
++}
++
++static int em_i_nodev_srsr(struct request * a, struct response * b){
++  return nodev();
++}
++
++static int em_i_nodev_graph(struct graph * g){
++  return nodev();
++}
++
++static int em_i_nodev_i4(int a, int b, int c, int d){
++  return nodev();
++}
++
++static int em_i_nodev_i3d2(int a, int b, int c, double d, double e){
++  return nodev();
++}
++
++static int em_i_nodev_c1i2(char * a, int b, int c){
++  return nodev();
++}
++
++static int em_i_nodev_i1(int a){
++  return nodev();
++}
++
++static void em_v_nodev_sad3i3(struct graph * a, double b, double c,
++      int * d, int * e){
++  nodev();
++}
++
+ DISPDEVICE device[] = {
+ 
+     { "error", 0, 0, 0, 0, 0, 0,
+-      (disp_fn_Init_t *) nop, (disp_fn_NewViewport_t *) nop,
+-      (disp_fn_Close_t *) nop, (disp_fn_Clear_t *) nop,
+-      (disp_fn_DrawLine_t *) nop, (disp_fn_Arc_t *) nop, (disp_fn_Text_t *) nop,
+-      (disp_fn_DefineColor_t *) nop, (disp_fn_DefineLinestyle_t *) nop,
+-      (disp_fn_SetLinestyle_t *) nop, (disp_fn_SetColor_t *) nop, (disp_fn_Update_t *) nop,
+-      (disp_fn_Track_t *) nop, (disp_fn_MakeMenu_t *) nop, (disp_fn_MakeDialog_t *) nop, gen_Input,
+-      (disp_fn_DatatoScreen_t *) nop,},
++      nop, em_i_nop_graph,
++      nop, nop,
++      em_i_nop_i4, em_i_nop_i3d2, em_i_nop_c1i2,
++      em_i_nop_i1d3, em_i_nop_i2,
++      em_i_nop_i1, em_i_nop_i1, nop,
++      nop, nop, nop, gen_Input,
++      em_v_nop_sad3i3,},
+ 
+ #ifndef X_DISPLAY_MISSING
++    #error X11 fn pointers
+     { "X11", 0, 0, 1024, 864, 0, 0,
+       X11_Init, X11_NewViewport,
+       X11_Close, X11_Clear,
+@@ -61,6 +131,7 @@ DISPDEVICE device[] = {
+ #endif
+ 
+ #ifdef HAS_WINGUI      /* Graphic-IO under MS Windows */
++    #error Windows fn pointers
+     { "Windows", 0, 0, 1000, 1000, 0, 0,
+       WIN_Init, WIN_NewViewport,
+       WIN_Close, WIN_Clear,
+@@ -82,6 +153,7 @@ DISPDEVICE device[] = {
+ #endif
+ 
+ #ifdef TCL_MODULE
++    #error Tk fn pointers
+     { "Tk", 0, 0, 1024, 864, 0, 0,
+       sp_Tk_Init, sp_Tk_NewViewport,
+       sp_Tk_Close, sp_Tk_Clear,
+@@ -96,37 +168,37 @@ DISPDEVICE device[] = {
+       Plt5_Init, Plt5_NewViewport,
+       Plt5_Close, Plt5_Clear,
+       Plt5_DrawLine, Plt5_Arc, Plt5_Text,
+-      (disp_fn_DefineColor_t *) nodev, (disp_fn_DefineLinestyle_t *) nodev,
++      em_i_nodev_i1d3, em_i_nodev_i2,
+       Plt5_SetLinestyle, Plt5_SetColor, Plt5_Update,
+-      (disp_fn_Track_t *) nodev, (disp_fn_MakeMenu_t *) nodev, (disp_fn_MakeDialog_t *) nodev, (disp_fn_Input_t *) nodev,
++      nodev, nodev, nodev, em_i_nodev_srsr,
+       gen_DatatoScreen, },
+ 
+     { "postscript", 0, 0, 1000, 1000, 0, 0,
+       PS_Init, PS_NewViewport,
+       PS_Close, PS_Clear,
+       PS_DrawLine, PS_Arc, PS_Text,
+-      (disp_fn_DefineColor_t *) nodev, (disp_fn_DefineLinestyle_t *) nodev,
++      em_i_nodev_i1d3, em_i_nodev_i2,
+       PS_SetLinestyle, PS_SetColor, PS_Update,
+-      (disp_fn_Track_t *) nodev, (disp_fn_MakeMenu_t *) nodev, (disp_fn_MakeDialog_t *) nodev, (disp_fn_Input_t *) nodev,
++      nodev, nodev, nodev, em_i_nodev_srsr,
+       gen_DatatoScreen, },
+ 
+     { "hpgl", 0, 0, 1000, 1000, 0, 0,
+       GL_Init, GL_NewViewport,
+       GL_Close, GL_Clear,
+       GL_DrawLine, GL_Arc, GL_Text,
+-      (disp_fn_DefineColor_t *) nodev, (disp_fn_DefineLinestyle_t *) nodev,
++      em_i_nodev_i1d3, em_i_nodev_i2,
+       GL_SetLinestyle, GL_SetColor, GL_Update,
+-      (disp_fn_Track_t *) nodev, (disp_fn_MakeMenu_t *) nodev, (disp_fn_MakeDialog_t *) nodev, (disp_fn_Input_t *) nodev,
++      nodev, nodev, nodev, em_i_nodev_srsr,
+       gen_DatatoScreen, },
+ 
+     { "printf", 0, 0, 24, 80, 0, 0,
+-      (disp_fn_Init_t *) nodev, (disp_fn_NewViewport_t *)  nodev,
+-      (disp_fn_Close_t *) nop, (disp_fn_Clear_t *) nodev,
+-      (disp_fn_DrawLine_t *) nodev, (disp_fn_Arc_t *) nodev, (disp_fn_Text_t *) nodev,
+-      (disp_fn_DefineColor_t *) nodev, (disp_fn_DefineLinestyle_t *) nodev,
+-      (disp_fn_SetLinestyle_t *) nodev, (disp_fn_SetColor_t *) nodev, (disp_fn_Update_t *) nop,
+-      (disp_fn_Track_t *) nodev, (disp_fn_MakeMenu_t *) nodev, (disp_fn_MakeDialog_t *) nodev, gen_Input,
+-      (disp_fn_DatatoScreen_t *) nodev, },
++      nodev, em_i_nodev_graph,
++      nop, nodev,
++      em_i_nodev_i4, em_i_nodev_i3d2, em_i_nodev_c1i2,
++      em_i_nodev_i1d3, em_i_nodev_i2,
++      em_i_nodev_i1, em_i_nodev_i1, nop,
++      nodev, nodev, nodev, gen_Input,
++      em_v_nodev_sad3i3, },
+ 
+ };
+ 

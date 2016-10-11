@@ -1,0 +1,12 @@
+diff --git a/src/frontend/terminal.c b/src/frontend/terminal.c
+index 7a1a8ff..3c49076 100644
+--- a/src/frontend/terminal.c
++++ b/src/frontend/terminal.c
+@@ -61,6 +61,7 @@ static int xsize, ysize;
+ static int xpos, ypos;
+ static bool noprint, nopause;
+ 
++#undef TIOCGWINSZ
+ 
+ /* Start output... */
+ 

@@ -1,0 +1,13 @@
+diff --git a/src/spicelib/devices/bsim3soi_pd/b3soipddef.h b/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
+index 2221ebc..9f022a6 100644
+--- a/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
++++ b/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
+@@ -1229,7 +1229,7 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDvoxhGiven   :1;
+     unsigned  B3SOIPDdeltavoxGiven :1;
+ 
+-
++    unsigned :0; 
+ /* v2.0 release */
+     unsigned  B3SOIPDk1w1Given   :1;   
+     unsigned  B3SOIPDk1w2Given   :1;

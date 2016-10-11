@@ -1,0 +1,19 @@
+diff --git a/src/frontend/com_plot.c b/src/frontend/com_plot.c
+index 6758dbd..003fea7 100644
+--- a/src/frontend/com_plot.c
++++ b/src/frontend/com_plot.c
+@@ -7,12 +7,14 @@
+ 
+ #include "com_plot.h"
+ 
++void EM_Plot_redraw();
+ 
+ /* plot name ... [xl[imit]] xlo xhi] [yl[imit ylo yhi] [vs xname] */
+ void
+ com_plot(wordlist *wl)
+ {
+     plotit(wl, NULL, NULL);
++    EM_Plot_redraw();
+ }
+ 
+ #ifdef TCL_MODULE

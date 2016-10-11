@@ -1,0 +1,52 @@
+diff --git a/src/frontend/display.c b/src/frontend/display.c
+index ac02cbd..3408d5b 100644
+--- a/src/frontend/display.c
++++ b/src/frontend/display.c
+@@ -37,6 +37,7 @@ static int nodev(void);
+ #include "postsc.h"
+ #include "hpgl.h"
+ 
++#include "plotting/em_plot.h"
+ 
+ static int em_i_nop_graph(struct graph * g){
+   return (1); 
+@@ -200,6 +201,15 @@ DISPDEVICE device[] = {
+       nodev, nodev, nodev, gen_Input,
+       em_v_nodev_sad3i3, },
+ 
++    { "em_plot", 0, 0, 1024, 864, 0, 0,
++      EM_Plot_Init, EM_Plot_NewViewport,
++      EM_Plot_Close, EM_Plot_Clear,
++      EM_Plot_DrawLine, EM_Plot_Arc, EM_Plot_Text,
++      EM_Plot_DefineColor, EM_Plot_DefineLinestyle,
++      EM_Plot_SetLinestyle, EM_Plot_SetColor, EM_Plot_Update,
++      nodev, nodev, nodev, EM_Plot_Input,
++      gen_DatatoScreen,},
++
+ };
+ 
+ 
+@@ -257,6 +267,8 @@ DevInit(void)
+ #endif
+ 
+ 
++    dispdev = FindDev("em_plot");
++
+     if (!dispdev) {
+ 
+ #if !defined(HAS_WINGUI) && !defined(TCL_MODULE) && !defined(SHARED_MODULE) && (defined(_MSC_VER) || defined(__MINGW32__))
+diff --git a/src/frontend/plotting/Makefile.am b/src/frontend/plotting/Makefile.am
+index 055cb75..05ca4ac 100644
+--- a/src/frontend/plotting/Makefile.am
++++ b/src/frontend/plotting/Makefile.am
+@@ -21,7 +21,9 @@ libplotting_la_SOURCES = \
+ 	plotcurv.c	\
+ 	plotcurv.h	\
+ 	plotit.c	\
+-	plotit.h
++	plotit.h	\
++	em_plot.c	\
++	em_plot.h
+ 
+ if !NO_X
+ libplotting_la_SOURCES += \
