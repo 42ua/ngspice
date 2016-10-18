@@ -6,7 +6,8 @@
 set -e
 
 for alias in 'emcc' 'emconfigure' 'emmake'; do
-  alias $alias="docker run -it --rm -m 1g -w='/home/src/ngspice-26' -v `pwd`:/home/src 42ua/emsdk $alias"
+  # docker run -e 'EMCC_DEBUG=1' ...
+  alias $alias="docker run -it --rm -m 2g -w='/home/src/ngspice-26' -v `pwd`:/home/src 42ua/emsdk $alias"
 done
 unset alias
 
@@ -66,7 +67,8 @@ fi
 mkdir -p emcc-build/
 
 cp patches/em_plot.c patches/em_plot.h ngspice-26/src/frontend/plotting
-emmake make CFLAGS='-Werror -Wno-error=shift-negative-value -Wno-error=parentheses-equality -Wno-error=tautological-pointer-compare -Wno-absolute-value' install
+emmake make clean
+emmake make install CFLAGS="$1 -Werror -Wno-error=shift-negative-value -Wno-error=parentheses-equality -Wno-error=tautological-pointer-compare -Wno-absolute-value"
 
 cd emcc-build/
 
