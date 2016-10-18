@@ -1,13 +1,513 @@
 diff --git a/src/spicelib/devices/bsim3soi_pd/b3soipddef.h b/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
-index 2221ebc..9f022a6 100644
+index 2221ebc..f569a2f 100644
 --- a/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
 +++ b/src/spicelib/devices/bsim3soi_pd/b3soipddef.h
-@@ -1229,7 +1229,7 @@ typedef struct sB3SOIPDmodel
-     unsigned  B3SOIPDvoxhGiven   :1;
-     unsigned  B3SOIPDdeltavoxGiven :1;
+@@ -1178,6 +1178,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDdvt0wGiven   :1;   
+     unsigned  B3SOIPDdvt1wGiven   :1;     
+     unsigned  B3SOIPDdvt2wGiven   :1;     
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDdroutGiven   :1;     
+     unsigned  B3SOIPDdsubGiven   :1;     
+     unsigned  B3SOIPDvth0Given   :1;
+@@ -1248,6 +1251,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDfbjtiiGiven :1;
+     unsigned  B3SOIPDesatiiGiven :1;
+     unsigned  B3SOIPDntunGiven  :1;
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDnrecf0Given  :1;
+     unsigned  B3SOIPDnrecr0Given  :1;
+     unsigned  B3SOIPDisbjtGiven  :1;
+@@ -1318,6 +1324,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDlagsGiven   :1;      
+     unsigned  B3SOIPDlb0Given   :1;
+     unsigned  B3SOIPDlb1Given   :1;
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDlketaGiven   :1;
+     unsigned  B3SOIPDlketasGiven   :1;
+     unsigned  B3SOIPDla1Given   :1;         
+@@ -1385,6 +1394,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDwnpeakGiven   :1;        
+     unsigned  B3SOIPDwnsubGiven   :1;
+     unsigned  B3SOIPDwngateGiven   :1;        
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDwvth0Given   :1;
+     unsigned  B3SOIPDwk1Given   :1;
+     unsigned  B3SOIPDwk1w1Given   :1;
+@@ -1449,6 +1461,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDwsii2Given   :1;       
+     unsigned  B3SOIPDwsiidGiven   :1;
+     unsigned  B3SOIPDwagidlGiven   :1;
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDwbgidlGiven   :1;
+     unsigned  B3SOIPDwngidlGiven   :1;
+     unsigned  B3SOIPDwntunGiven   :1;
+@@ -1516,6 +1531,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDpvoffGiven   :1;
+     unsigned  B3SOIPDpeta0Given   :1;         
+     unsigned  B3SOIPDpetabGiven   :1;         
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDpdsubGiven   :1;      
+     unsigned  B3SOIPDpcitGiven   :1;           
+     unsigned  B3SOIPDpcdscGiven   :1;           
+@@ -1585,6 +1603,9 @@ typedef struct sB3SOIPDmodel
+     unsigned  B3SOIPDemGiven  :1;     
+     unsigned  B3SOIPDefGiven  :1;     
+     unsigned  B3SOIPDafGiven  :1;     
++
++    unsigned :0; // !!! BUG 4540 !!!
++
+     unsigned  B3SOIPDkfGiven  :1;     
+     unsigned  B3SOIPDnoifGiven  :1;     
+ 
+diff --git a/src/spicelib/devices/bsim4v4/bsim4v4def.h b/src/spicelib/devices/bsim4v4/bsim4v4def.h
+index 8e37d2d..eaf72a3 100644
+--- a/src/spicelib/devices/bsim4v4/bsim4v4def.h
++++ b/src/spicelib/devices/bsim4v4/bsim4v4def.h
+@@ -1448,6 +1448,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4dvt1Given   :1;
+     unsigned  BSIM4v4dvt2Given   :1;
+     unsigned  BSIM4v4dvt0wGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4dvt1wGiven   :1;
+     unsigned  BSIM4v4dvt2wGiven   :1;
+     unsigned  BSIM4v4droutGiven   :1;
+@@ -1512,6 +1515,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4aigbinvGiven   :1;
+     unsigned  BSIM4v4bigbinvGiven   :1;
+     unsigned  BSIM4v4cigbinvGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4nigcGiven   :1;
+     unsigned  BSIM4v4nigbinvGiven   :1;
+     unsigned  BSIM4v4nigbaccGiven   :1;
+@@ -1581,6 +1587,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4ckappasGiven   :1;
+     unsigned  BSIM4v4ckappadGiven   :1;
+     unsigned  BSIM4v4cfGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4vfbcvGiven   :1;
+     unsigned  BSIM4v4clcGiven   :1;
+     unsigned  BSIM4v4cleGiven   :1;
+@@ -1648,6 +1657,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4llpebGiven   :1;
+     unsigned  BSIM4v4ldvt0Given   :1;
+     unsigned  BSIM4v4ldvt1Given   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4ldvt2Given   :1;
+     unsigned  BSIM4v4ldvt0wGiven   :1;
+     unsigned  BSIM4v4ldvt1wGiven   :1;
+@@ -1712,6 +1724,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4lcigbinvGiven   :1;
+     unsigned  BSIM4v4lnigcGiven   :1;
+     unsigned  BSIM4v4lnigbinvGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4lnigbaccGiven   :1;
+     unsigned  BSIM4v4lntoxGiven   :1;
+     unsigned  BSIM4v4leigbinvGiven   :1;
+@@ -1780,6 +1795,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4wdvt0wGiven   :1;
+     unsigned  BSIM4v4wdvt1wGiven   :1;
+     unsigned  BSIM4v4wdvt2wGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4wdroutGiven   :1;
+     unsigned  BSIM4v4wdsubGiven   :1;
+     unsigned  BSIM4v4wvth0Given   :1;
+@@ -1844,6 +1862,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4wntoxGiven   :1;
+     unsigned  BSIM4v4weigbinvGiven   :1;
+     unsigned  BSIM4v4wpigcdGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4wpoxedgeGiven   :1;
+     unsigned  BSIM4v4wxrcrg1Given   :1;
+     unsigned  BSIM4v4wxrcrg2Given   :1;
+@@ -1912,6 +1933,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4pdsubGiven   :1;
+     unsigned  BSIM4v4pvth0Given   :1;
+     unsigned  BSIM4v4puaGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4pua1Given   :1;
+     unsigned  BSIM4v4pubGiven   :1;
+     unsigned  BSIM4v4pub1Given   :1;
+@@ -1976,6 +2000,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4pxrcrg1Given   :1;
+     unsigned  BSIM4v4pxrcrg2Given   :1;
+     unsigned  BSIM4v4plambdaGiven    :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4pvtlGiven    :1;
+     unsigned  BSIM4v4pxnGiven    :1;
+     unsigned  BSIM4v4pvfbsdoffGiven    :1;
+@@ -2048,6 +2075,9 @@ typedef struct sBSIM4v4model
+     unsigned  BSIM4v4LwGiven   :1;
+     unsigned  BSIM4v4LwcGiven   :1;
+     unsigned  BSIM4v4LwnGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v4LwlGiven   :1;
+     unsigned  BSIM4v4LwlcGiven   :1;
+     unsigned  BSIM4v4LminGiven   :1;
+diff --git a/src/spicelib/devices/bsim4v5/bsim4v5def.h b/src/spicelib/devices/bsim4v5/bsim4v5def.h
+index 3cef6e1..d74cc00 100644
+--- a/src/spicelib/devices/bsim4v5/bsim4v5def.h
++++ b/src/spicelib/devices/bsim4v5/bsim4v5def.h
+@@ -1545,6 +1545,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5dvtp0Given :1;
+     unsigned  BSIM4v5dvtp1Given :1;
+     unsigned  BSIM4v5lpe0Given   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5lpebGiven   :1;
+     unsigned  BSIM4v5dvt0Given   :1;   
+     unsigned  BSIM4v5dvt1Given   :1;     
+@@ -1609,6 +1612,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5egidlGiven   :1;
+     unsigned  BSIM4v5aigcGiven   :1;
+     unsigned  BSIM4v5bigcGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5cigcGiven   :1;
+     unsigned  BSIM4v5aigsdGiven   :1;
+     unsigned  BSIM4v5bigsdGiven   :1;
+@@ -1678,6 +1684,9 @@ typedef struct sBSIM4v5model
+     unsigned BSIM4v5rbpdwGiven :1;
+     unsigned BSIM4v5rbpdnfGiven :1;
+ 
++    unsigned :0; // auto
++
++
+     unsigned BSIM4v5rbpbx0Given :1;
+     unsigned BSIM4v5rbpbxlGiven :1;
+     unsigned BSIM4v5rbpbxwGiven :1;
+@@ -1749,6 +1758,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5rshgGiven :1;
+     unsigned  BSIM4v5ngconGiven :1;
+ 
++    unsigned :0; // auto
++
++
+ 
+     /* Length dependence */
+     unsigned  BSIM4v5lcdscGiven   :1;
+@@ -1815,6 +1827,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5lrswGiven   :1;
+     unsigned  BSIM4v5lrdwGiven   :1;
+     unsigned  BSIM4v5lprwgGiven   :1;      
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5lprwbGiven   :1;      
+     unsigned  BSIM4v5lprtGiven   :1;      
+     unsigned  BSIM4v5leta0Given   :1;    
+@@ -1881,6 +1896,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5lvfbcvGiven   :1;
+     unsigned  BSIM4v5lnoffGiven   :1;
+     unsigned  BSIM4v5lvoffcvGiven :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5lacdeGiven   :1;
+     unsigned  BSIM4v5lmoinGiven   :1;
+ 
+@@ -1947,6 +1965,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5wminvGiven   :1;
+     unsigned  BSIM4v5wrdswGiven   :1;      
+     unsigned  BSIM4v5wrswGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5wrdwGiven   :1;
+     unsigned  BSIM4v5wprwgGiven   :1;      
+     unsigned  BSIM4v5wprwbGiven   :1;      
+@@ -2013,6 +2034,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5wclcGiven   :1;
+     unsigned  BSIM4v5wcleGiven   :1;
+     unsigned  BSIM4v5wvfbcvGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5wnoffGiven   :1;
+     unsigned  BSIM4v5wvoffcvGiven :1;
+     unsigned  BSIM4v5wacdeGiven   :1;
+@@ -2079,6 +2103,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5pvoffGiven   :1;
+     unsigned  BSIM4v5ptvoffGiven   :1;
+     unsigned  BSIM4v5pminvGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5prdswGiven   :1;      
+     unsigned  BSIM4v5prswGiven   :1;
+     unsigned  BSIM4v5prdwGiven   :1;
+@@ -2145,6 +2172,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5pckappadGiven   :1;
+     unsigned  BSIM4v5pcfGiven   :1;
+     unsigned  BSIM4v5pclcGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5pcleGiven   :1;
+     unsigned  BSIM4v5pvfbcvGiven   :1;
+     unsigned  BSIM4v5pnoffGiven   :1;
+@@ -2174,7 +2204,7 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5SbulkJctGateSideGradingCoeffGiven   :1;
+     unsigned  BSIM4v5SunitLengthGateSidewallJctCapGiven   :1;
+     unsigned  BSIM4v5SjctEmissionCoeffGiven :1;
+-    unsigned  BSIM4v5SjctTempExponentGiven	:1;
++    unsigned  BSIM4v5SjctTempExponentGiven  :1;
+ 
+     unsigned  BSIM4v5DjctSatCurDensityGiven   :1;
+     unsigned  BSIM4v5DjctSidewallSatCurDensityGiven   :1;
+@@ -2216,6 +2246,9 @@ typedef struct sBSIM4v5model
+     unsigned  BSIM4v5LwlGiven   :1;
+     unsigned  BSIM4v5LwlcGiven   :1;
+     unsigned  BSIM4v5LminGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v5LmaxGiven   :1;
+ 
+     unsigned  BSIM4v5WintGiven   :1;
+diff --git a/src/spicelib/devices/bsim4v6/bsim4v6def.h b/src/spicelib/devices/bsim4v6/bsim4v6def.h
+index 8e522bd..e38e95e 100644
+--- a/src/spicelib/devices/bsim4v6/bsim4v6def.h
++++ b/src/spicelib/devices/bsim4v6/bsim4v6def.h
+@@ -1732,9 +1732,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6toxrefGiven   :1;
+     unsigned  BSIM4v6eotGiven   :1;
+     unsigned  BSIM4v6vddeotGiven   :1;
+-	unsigned  BSIM4v6tempeotGiven  :1;
+-	unsigned  BSIM4v6leffeotGiven  :1;
+-	unsigned  BSIM4v6weffeotGiven  :1;
++    unsigned  BSIM4v6tempeotGiven  :1;
++    unsigned  BSIM4v6leffeotGiven  :1;
++    unsigned  BSIM4v6weffeotGiven  :1;
+     unsigned  BSIM4v6adosGiven   :1;
+     unsigned  BSIM4v6bdosGiven   :1;
+     unsigned  BSIM4v6toxeGiven   :1;
+@@ -1772,6 +1772,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6gamma1Given   :1;
+     unsigned  BSIM4v6gamma2Given   :1;
+     unsigned  BSIM4v6vbxGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6vbmGiven   :1;
+     unsigned  BSIM4v6xtGiven   :1;
+     unsigned  BSIM4v6k1Given   :1;
+@@ -1796,7 +1799,7 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6dsubGiven   :1;    
+     unsigned  BSIM4v6vth0Given   :1;
+     unsigned  BSIM4v6euGiven   :1;
+-	unsigned  BSIM4v6ucsGiven  :1;
++    unsigned  BSIM4v6ucsGiven  :1;
+     unsigned  BSIM4v6uaGiven   :1;
+     unsigned  BSIM4v6ua1Given   :1;
+     unsigned  BSIM4v6ubGiven   :1;
+@@ -1809,7 +1812,7 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6lpGiven     :1;
+     unsigned  BSIM4v6u0Given   :1;
+     unsigned  BSIM4v6uteGiven   :1;
+-	unsigned  BSIM4v6ucsteGiven :1;
++    unsigned  BSIM4v6ucsteGiven :1;
+     unsigned  BSIM4v6voffGiven   :1;
+     unsigned  BSIM4v6tvoffGiven   :1;
+     unsigned  BSIM4v6vofflGiven  :1;
+@@ -1836,6 +1839,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6pditsdGiven    :1;
+     unsigned  BSIM4v6pditslGiven    :1;
+     unsigned  BSIM4v6pscbe1Given   :1;    
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6pscbe2Given   :1;    
+     unsigned  BSIM4v6pvagGiven   :1;    
+     unsigned  BSIM4v6deltaGiven  :1;     
+@@ -1895,12 +1901,15 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6jtsswdGiven   :1;
+     unsigned  BSIM4v6jtsswgsGiven   :1;
+     unsigned  BSIM4v6jtsswgdGiven   :1;
+-	unsigned  BSIM4v6jtweffGiven    :1;
++    unsigned  BSIM4v6jtweffGiven    :1;
+     unsigned  BSIM4v6njtsGiven   :1;
+     unsigned  BSIM4v6njtsswGiven   :1;
+     unsigned  BSIM4v6njtsswgGiven   :1;
+     unsigned  BSIM4v6njtsdGiven   :1;
+     unsigned  BSIM4v6njtsswdGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6njtsswgdGiven   :1;
+     unsigned  BSIM4v6xtssGiven   :1;
+     unsigned  BSIM4v6xtsdGiven   :1;
+@@ -1973,6 +1982,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6lcGiven    :1;
+     unsigned  BSIM4v6xnGiven    :1;
+     unsigned  BSIM4v6vfbsdoffGiven    :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6lintnoiGiven    :1;
+     unsigned  BSIM4v6tvfbsdoffGiven    :1;
+ 
+@@ -2042,6 +2054,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6lkt2Given   :1;
+     unsigned  BSIM4v6lk2Given   :1;
+     unsigned  BSIM4v6lk3Given   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6lk3bGiven   :1;
+     unsigned  BSIM4v6lw0Given   :1;
+     unsigned  BSIM4v6ldvtp0Given :1;
+@@ -2069,9 +2084,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6llpGiven     :1;
+     unsigned  BSIM4v6lu0Given   :1;
+     unsigned  BSIM4v6leuGiven   :1;
+-	unsigned  BSIM4v6lucsGiven   :1;
++    unsigned  BSIM4v6lucsGiven   :1;
+     unsigned  BSIM4v6luteGiven   :1;
+-	unsigned  BSIM4v6lucsteGiven  :1;
++    unsigned  BSIM4v6lucsteGiven  :1;
+     unsigned  BSIM4v6lvoffGiven   :1;
+     unsigned  BSIM4v6ltvoffGiven   :1;
+     unsigned  BSIM4v6lminvGiven   :1;
+@@ -2106,6 +2121,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6lvfbGiven   :1;
+     unsigned  BSIM4v6lagidlGiven   :1;
+     unsigned  BSIM4v6lbgidlGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6lcgidlGiven   :1;
+     unsigned  BSIM4v6legidlGiven   :1;
+     unsigned  BSIM4v6lagislGiven   :1;
+@@ -2174,6 +2192,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6wa2Given   :1;
+     unsigned  BSIM4v6wketaGiven   :1;    
+     unsigned  BSIM4v6wnsubGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6wndepGiven   :1;
+     unsigned  BSIM4v6wnsdGiven    :1;
+     unsigned  BSIM4v6wphinGiven   :1;
+@@ -2216,9 +2237,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6wlpGiven     :1;
+     unsigned  BSIM4v6wu0Given   :1;
+     unsigned  BSIM4v6weuGiven   :1;
+-	unsigned  BSIM4v6wucsGiven  :1;
++    unsigned  BSIM4v6wucsGiven  :1;
+     unsigned  BSIM4v6wuteGiven   :1;
+-	unsigned  BSIM4v6wucsteGiven  :1;
++    unsigned  BSIM4v6wucsteGiven  :1;
+     unsigned  BSIM4v6wvoffGiven   :1;
+     unsigned  BSIM4v6wtvoffGiven   :1;
+     unsigned  BSIM4v6wminvGiven   :1;
+@@ -2238,6 +2259,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6wfproutGiven   :1;
+     unsigned  BSIM4v6wpditsGiven    :1;
+     unsigned  BSIM4v6wpditsdGiven    :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6wpscbe1Given   :1;    
+     unsigned  BSIM4v6wpscbe2Given   :1;    
+     unsigned  BSIM4v6wpvagGiven   :1;    
+@@ -2304,6 +2328,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6wnoffGiven   :1;
+     unsigned  BSIM4v6wvoffcvGiven :1;
+     unsigned  BSIM4v6wacdeGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6wmoinGiven   :1;
+ 
+     /* Cross-term dependence */
+@@ -2363,13 +2390,16 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6plpGiven     :1;
+     unsigned  BSIM4v6pu0Given   :1;
+     unsigned  BSIM4v6peuGiven   :1;
+-	unsigned  BSIM4v6pucsGiven   :1;
++    unsigned  BSIM4v6pucsGiven   :1;
+     unsigned  BSIM4v6puteGiven   :1;
+-	unsigned  BSIM4v6pucsteGiven  :1;
++    unsigned  BSIM4v6pucsteGiven  :1;
+     unsigned  BSIM4v6pvoffGiven   :1;
+     unsigned  BSIM4v6ptvoffGiven   :1;
+     unsigned  BSIM4v6pminvGiven   :1;
+     unsigned  BSIM4v6pminvcvGiven   :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6prdswGiven   :1;      
+     unsigned  BSIM4v6prswGiven   :1;
+     unsigned  BSIM4v6prdwGiven   :1;
+@@ -2434,6 +2464,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6pxrcrg1Given   :1;
+     unsigned  BSIM4v6pxrcrg2Given   :1;
+     unsigned  BSIM4v6plambdaGiven    :1;
++
++    unsigned :0; // auto
++
+     unsigned  BSIM4v6pvtlGiven    :1;
+     unsigned  BSIM4v6pxnGiven    :1;
+     unsigned  BSIM4v6pvfbsdoffGiven    :1;
+@@ -2475,7 +2508,7 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6SbulkJctGateSideGradingCoeffGiven   :1;
+     unsigned  BSIM4v6SunitLengthGateSidewallJctCapGiven   :1;
+     unsigned  BSIM4v6SjctEmissionCoeffGiven :1;
+-    unsigned  BSIM4v6SjctTempExponentGiven	:1;
++    unsigned  BSIM4v6SjctTempExponentGiven  :1;
+ 
+     unsigned  BSIM4v6DjctSatCurDensityGiven   :1;
+     unsigned  BSIM4v6DjctSidewallSatCurDensityGiven   :1;
+@@ -2507,6 +2540,9 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6vbsMaxGiven  :1;
+     unsigned  BSIM4v6vbdMaxGiven  :1;
+ 
++    unsigned :0; // auto
++
++
+     unsigned  BSIM4v6LintGiven   :1;
+     unsigned  BSIM4v6LlGiven   :1;
+     unsigned  BSIM4v6LlcGiven   :1;
+@@ -2571,7 +2607,6 @@ typedef struct sBSIM4v6model
+     unsigned  BSIM4v6pk2weGiven   :1;
+     unsigned  BSIM4v6pku0weGiven   :1;
  
 -
-+    unsigned :0; 
- /* v2.0 release */
-     unsigned  B3SOIPDk1w1Given   :1;   
-     unsigned  B3SOIPDk1w2Given   :1;
+ } BSIM4v6model;
+ 
+ 

@@ -14,15 +14,17 @@ unset alias
 if [ ! -d "ngspice-26" ]; then
 
   # minimal (develop version)
-  git clone https://github.com/concord-consortium/ngspice.git ngspice-26
-  cd ngspice-26
-  git checkout ce4c0fb34a4c328e12aaebc1b34a67a7141e694b
+  # git clone https://github.com/concord-consortium/ngspice.git ngspice-26
+  # cd ngspice-26
+  # git checkout ce4c0fb34a4c328e12aaebc1b34a67a7141e694b
 
   # full
-  # curl -sL http://heanet.dl.sourceforge.net/project/ngspice/ng-spice-rework/26/ngspice-26.tar.gz | tar xz
-  # cd ngspice-26
+  curl -sL http://heanet.dl.sourceforge.net/project/ngspice/ng-spice-rework/26/ngspice-26.tar.gz | tar xz
+  cd ngspice-26
+  git init && git add . && git commit -m 'f'
   # https://github.com/kripken/emscripten/issues/4540
-  # git diff ngspice-26/src/spicelib/devices/bsim3soi_pd/b3soipddef.h > 4540.patch.diff
+  # cd ngspice-26 && git diff src/spicelib/devices/bsim3soi_pd/b3soipddef.h src/spicelib/devices/bsim4v4/bsim4v4def.h src/spicelib/devices/bsim4v5/bsim4v5def.h src/spicelib/devices/bsim4v6/bsim4v6def.h > ../patches/4540.patch.diff && cd -
+  # http://awk.js.org/index.html?gist=5e4aff819db100b27633b87901f53cc0
   patch -p1 < ../patches/4540.patch.diff
 
   # cd ngspice-26 && git diff src/frontend/terminal.c > ../patches/TIOCGWINSZ.patch.diff && cd -

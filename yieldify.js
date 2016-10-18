@@ -21,8 +21,8 @@ var ast = fs.readFileSync(process.argv[2], 'utf8');
 
 console.log('\x1B[92mAST parsing...\x1B[0m');
 
-ast = acorn.parse(ast, {locations: true});
-// ast = acorn.parse(ast);
+// ast = acorn.parse(ast, {locations: true});
+ast = acorn.parse(ast);
 
 (function () {
 
