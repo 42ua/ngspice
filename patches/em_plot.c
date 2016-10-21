@@ -49,7 +49,7 @@ EM_Plot_Init(void)
       var devicePixelRatio = window.devicePixelRatio;
       if (devicePixelRatio) {
         try {
-          var canvas = document.getElementById('plot_canvas');
+          var canvas = document.getElementById('ngspice_plot');
           var oldWidth = canvas.width;
           var oldHeight = canvas.height;
           canvas.style.width  = oldWidth + 'px';
@@ -73,16 +73,16 @@ int
 EM_Plot_NewViewport(GRAPH *graph)
 {
     EM_ASM(
-      document.getElementById('plot_canvas').style.display = 'block';
+      document.getElementById('ngspice_plot').style.display = 'block';
     );
 
     dispdev->width = EM_ASM_INT_V({
-        var canvas = document.getElementById('plot_canvas');
+        var canvas = document.getElementById('ngspice_plot');
         return parseInt(canvas.style.width, 10) || canvas.width;
     });
 
     dispdev->height = EM_ASM_INT_V({
-        var canvas = document.getElementById('plot_canvas');
+        var canvas = document.getElementById('ngspice_plot');
         return parseInt(canvas.style.height, 10) || canvas.height;
     });
 
@@ -101,7 +101,7 @@ EM_Plot_NewViewport(GRAPH *graph)
         graph->fontheight = FONT_HEIGHT;
 
         EM_ASM_({
-          document.getElementById('plot_canvas').getContext('2d').font = $0 + 'px sans-serif';
+          document.getElementById('ngspice_plot').getContext('2d').font = $0 + 'px sans-serif';
         }, graph->fontheight);
 
         graph->absolute.width = dispdev->width;
@@ -118,15 +118,18 @@ EM_Plot_NewViewport(GRAPH *graph)
 }
 
 void EM_Plot_redraw() {
-  DEVDEP(currentgraph).isopen = TRUE;
-  gr_redraw(currentgraph);
+  // try avoid infinite recursion (if any occurs in gr_redraw)
+  if (!DEVDEP(currentgraph).isopen) {
+    DEVDEP(currentgraph).isopen = TRUE;
+    gr_redraw(currentgraph);
+  }
 }
 
 int
 EM_Plot_Close(void)
 {
     EM_ASM(
-      document.getElementById('plot_canvas').style.display = 'none';
+      document.getElementById('ngspice_plot').style.display = 'none';
     );
 
     return 0;
@@ -145,7 +148,7 @@ EM_Plot_DrawLine(int x1, int y1, int x2, int y2)
     }
 
     EM_ASM_({
-      var context = document.getElementById('plot_canvas').getContext('2d');
+      var context = document.getElementById('ngspice_plot').getContext('2d');
       context.beginPath();
       context.moveTo($0, $1);
       context.lineTo($2, $3);
@@ -215,7 +218,7 @@ EM_Plot_Arc(int x0, int y0, int radius, double theta, double delta_theta)
     // EM_Plot_SetColor(c);
     // linear_arc(x0, y0, radius, theta, delta_theta);
     EM_ASM_({
-      var context = document.getElementById('plot_canvas').getContext('2d');
+      var context = document.getElementById('ngspice_plot').getContext('2d');
       context.beginPath();
       context.arc($0, $1, $2, -$3, -($3 + $4), $4 > 0);
       context.stroke();
@@ -234,7 +237,7 @@ EM_Plot_Text(char *text, int x, int y)
     if (!DEVDEP(currentgraph).isopen) return 0;
 
     EM_ASM_({
-      var context = document.getElementById('plot_canvas').getContext('2d');
+      var context = document.getElementById('ngspice_plot').getContext('2d');
       // http://www.w3schools.com/tags/canvas_textbaseline.asp
       context.textBaseline = "middle";
       var text = Module.Pointer_stringify($0);
@@ -273,7 +276,7 @@ EM_Plot_SetLinestyle(int linestyleid)
         currentgraph->linestyle = linestyleid;
 
         EM_ASM_({
-          var context = document.getElementById('plot_canvas').getContext('2d');
+          var context = document.getElementById('ngspice_plot').getContext('2d');
 
           switch ($0) {
             case 1:
@@ -313,7 +316,7 @@ EM_Plot_SetColor(int colorid)
       currentgraph->currentcolor = colorid;
 
       EM_ASM_({
-        var context = document.getElementById('plot_canvas').getContext('2d');
+        var context = document.getElementById('ngspice_plot').getContext('2d');
         context.strokeStyle = ([
           'black', 
           'white', 'red', 'blue',
@@ -342,7 +345,7 @@ int
 EM_Plot_Clear(void)
 {
     EM_ASM_({
-        var context =  document.getElementById('plot_canvas').getContext('2d');
+        var context =  document.getElementById('ngspice_plot').getContext('2d');
         context.beginPath();
         context.rect(0, 0, $0, $1);
         context.fillStyle = 'black';
