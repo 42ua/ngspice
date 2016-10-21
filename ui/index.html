@@ -22,7 +22,7 @@
       position:relative;
       background-color: black;
       border: 2px solid #CCC;
-      margin: 25px auto;
+      margin: 25px auto 0 auto;
     }
     /* The inner console element. */
     .jqconsole {
@@ -66,30 +66,44 @@
 
     /* input */
 
-    #input_files_wrapper {
-      width: 750px;
+    .ngsice_toolbar {
+      width: 754px;
       position:relative;
-      margin: 0 auto;
-      background-color: black;
-      border: 2px solid #CCC;
+      margin: 25px auto;
     }
 
-    #input_files_wrapper input {
+    .ngsice_toolbar input {
+      margin: 0 25px 0 0;
       font-size: inherit;
+    }
+
+    .em_files_list {
+      width: 754px;
+      margin: 25px auto 0 auto;
+    }
+
+    .em_files_list a {
+      color: inherit;
+      text-decoration: inherit;
     }
 
     #plot_canvas {
       position:relative;
       display: none;
-      margin: 0 auto 25px auto;
+      margin: 25px auto 0 auto;
       border: 2px solid #CCC;
     }
+
     </style>
   </head>
   <body>
     <div id="console"></div>
     <canvas id="plot_canvas" width="750" height="400"></canvas>
-    <div id="input_files_wrapper"><input type="file" id="input_files" accept=".net" multiple autocomplete="off"></div>
+    <div class="em_files_list"></div>
+    <div class="ngsice_toolbar">
+      <!-- http://stackoverflow.com/q/1084925/ -->
+      <input type="button" value="~/"><input type="file" accept=".net" multiple autocomplete="off">
+    </div>
 
     <script src="lib/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="lib/jqconsole/jqconsole.min.js" type="text/javascript" charset="utf-8"></script>
@@ -99,21 +113,59 @@
 
         'use strict';
 
-        $('#input_files').change(function(evt) {
+        $(".ngsice_toolbar input[type='button']").click(function() {
+          // alert(Module.yld_FS.cwd());
+          var files = Module.yld_FS.readdir('/home/NGUser');
+          files = files.filter(v => Module.yld_FS.isFile(
+              Module.yld_FS.stat('/home/NGUser/' + v).mode)
+          );
+          files.reduce(
+            (p, c, i) => (i ? p.append(' | ') : p).append(
+              $("<a />", {
+                  href : "#",
+                  text : c,
+              }).click(function() {
+                var name = $( this ).text(),
+                    data = Module.yld_FS.readFile(name);
+                // https://bgrins.github.io/videoconverter.js/
+                $( this ).attr({
+                  href: URL.createObjectURL(new Blob([data])),
+                  download: name
+                });
+              })), 
+            $(".em_files_list").empty()
+          );
+        });
+
+        $(".ngsice_toolbar input[type='file']").change(function(evt) {
           var files = evt.target.files; // FileList object
           for (var file of files) {
             var reader = new FileReader();
-            reader.onload = function(e) { 
-              var contents = e.target.result;
-              Module.FS_createDataFile(
-                '/',
-                file.name,
-                Module['intArrayFromString'](contents),
-                true,
-                true
-              );  
-            };
-            reader.readAsText(file);
+            // Closure to capture the file information.
+            reader.onload = (function(theFile) {
+              return function(e) {
+                var contents = e.target.result;
+                // try {
+                //   Module.FS_unlink('/home/NGUser/' + theFile.name);
+                // } catch (e){
+                //   console.log(e);
+                // }
+                // var data = [].slice.call(new Uint8Array(contents));
+                // https://bgrins.github.io/videoconverter.js/
+                try {
+                  Module.FS_createDataFile(
+                    '/home/NGUser',
+                    theFile.name,
+                    new Uint8Array(contents),
+                    true,
+                    true
+                  );
+                } catch (e){
+                  console.log(e);
+                }
+              };
+            })(file);
+            reader.readAsArrayBuffer(file);
           }
         });
 
@@ -335,6 +387,10 @@
         };
 
         Module.yld_pre_init = function(TTY, FS) {
+          Module.yld_FS = FS;
+          Module.yld_FS.createFolder('/home', 'NGUser', true, true);
+          Module.yld_FS.chdir('/home/NGUser');
+
           Module._main = function() {
             function execute(generator, yieldValue) {
               var next = generator.next(yieldValue);
