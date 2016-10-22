@@ -42,7 +42,7 @@ $(function () {
 
   });
 
-  $(".ngsice_toolbar input[value='~/']").click(function() {
+  $(".ngsice_toolbar input[value='ls']").click(function() {
     // alert(Module.yld_FS.cwd());
     var files = Module.yld_FS.readdir('.');
     files = files.filter(v => Module.yld_FS.isFile(
@@ -108,16 +108,26 @@ $(function () {
   Module.yld_window = window;
 
   var assert_resolved = null;
+  var assert_prompt_watchdog = 0;
   var prompt_data = null;
 
   function* get_stdin_promise () {
     if (assert_resolved === false) {
       var err = new Error('Blocking stdin recursion ?');
       console.error(err);
-      throw err;
+      alert(err);
+      // throw err;
+    }
+
+    if (++assert_prompt_watchdog > 1000) {
+      var err = new Error('Infinite stdin loop ?');
+      console.error(err);
+      alert(err);
+      // throw err;
     }
 
     if (prompt_data === null) {
+      assert_prompt_watchdog = 0;
       if (jqconsole_gist_stdin.length){
         prompt_data = jqconsole_gist_stdin.shift();
         jqconsole.Write(prompt_data + '\n', 'jqconsole-input');
@@ -393,12 +403,15 @@ $(function () {
       }
     }
 
+    // http://localhost:8000/?gist=3839054076a3efc8ecde26e4e8933a2a
+
     var gistId = getParameterByName('gist');
 
     if (gistId) {
       $.get( 'https://api.github.com/gists/' + gistId)
       .done(function( data ) {
         jqconsole_gist_stdin = data.files['stdin'].content.split('\n');
+        jqconsole.SetHistory(jqconsole_gist_stdin);
         ngspice_asmjs_fn(Module);
         Object.keys(data.files).forEach(function (key) {
           if (key !== 'stdin') {
