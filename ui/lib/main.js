@@ -2,11 +2,51 @@
 
 $(function () {
 
-  $(".ngsice_toolbar input[type='button']").click(function() {
+  $(".ngsice_toolbar input[value='gist']").click(function() {
     // alert(Module.yld_FS.cwd());
-    var files = Module.yld_FS.readdir('/home/NGUser');
+    var files = Module.yld_FS.readdir('.');
     files = files.filter(v => Module.yld_FS.isFile(
-        Module.yld_FS.stat('/home/NGUser/' + v).mode)
+        Module.yld_FS.stat(v).mode)
+    );
+    // http://stackoverflow.com/q/12710001/
+    function Uint8ToString(u8a){
+      var CHUNK_SZ = 0x8000;
+      var c = [];
+      for (var i=0; i < u8a.length; i+=CHUNK_SZ) {
+        c.push(String.fromCharCode.apply(null, u8a.subarray(i, i+CHUNK_SZ)));
+      }
+      return c.join('');
+    }
+    files = files.reduce(
+      (p, c) => Object.assign(p, {
+        [c]: {content: btoa(Uint8ToString(Module.yld_FS.readFile(c)))}
+      }),
+      {stdin: {content: jqconsole.GetHistory().join('\n')}});
+
+    $.post('https://api.github.com/gists', 
+      JSON.stringify({
+        "description": "ngspice.js",
+        "files": files
+      })
+    ).done(function(response) {
+      var url = response.html_url,
+          my = $(location).attr('href').replace(/(#|\?).*$/, "") + '?gist=' + response.id;
+      $(".em_files_list").empty().append(
+        "<strong>GIST:</strong> <a href='" + url + "'>" + response.id + "</a> | " +
+        "<strong>Share:</strong> <a href='" + my + "'>me</a>"
+      );
+    }).fail(function( e ) {
+      console.log(e);
+      $(".em_files_list").empty().append("GIST POST: " + e.status + " | " + e.statusText);
+    });
+
+  });
+
+  $(".ngsice_toolbar input[value='~/']").click(function() {
+    // alert(Module.yld_FS.cwd());
+    var files = Module.yld_FS.readdir('.');
+    files = files.filter(v => Module.yld_FS.isFile(
+        Module.yld_FS.stat(v).mode)
     );
     files.reduce(
       (p, c, i) => (i ? p.append(' | ') : p).append(
@@ -49,8 +89,9 @@ $(function () {
               true,
               true
             );
-          } catch (e){
+          } catch (e) {
             console.log(e);
+            $(".em_files_list").empty().append(e.toString());
           }
         };
       })(file);
@@ -59,6 +100,7 @@ $(function () {
   });
 
   var jqconsole = $('#console').jqconsole('','');
+  var jqconsole_gist_stdin = [];
   var Module = {};
 
   Module.arguments = [];
@@ -74,15 +116,21 @@ $(function () {
       console.error(err);
       throw err;
     }
+
     if (prompt_data === null) {
-      assert_resolved = false;
-      yield new Promise(function(resolve, reject) {
-        jqconsole.Prompt(true, function (data) {
-            prompt_data = data;
-            assert_resolved = true;
-            resolve();
-        }); 
-      });
+      if (jqconsole_gist_stdin.length){
+        prompt_data = jqconsole_gist_stdin.shift();
+        jqconsole.Write(prompt_data + '\n', 'jqconsole-input');
+      } else {
+        assert_resolved = false;
+        yield new Promise(function(resolve, reject) {
+          jqconsole.Prompt(true, function (data) {
+              prompt_data = data;
+              assert_resolved = true;
+              resolve();
+          }); 
+        });
+      }
     }
   }
 
@@ -326,7 +374,57 @@ $(function () {
         Module['UTF8ArrayToString']([val], 0),
         'jqconsole-stderr');
     }
-  }
+  };
 
-  ngspice_asmjs_fn(Module);
+  /* Gist load or default */
+
+  (function() {
+    function getParameterByName(name, url) {
+      try {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    var gistId = getParameterByName('gist');
+
+    if (gistId) {
+      $.get( 'https://api.github.com/gists/' + gistId)
+      .done(function( data ) {
+        jqconsole_gist_stdin = data.files['stdin'].content.split('\n');
+        ngspice_asmjs_fn(Module);
+        Object.keys(data.files).forEach(function (key) {
+          if (key !== 'stdin') {
+            var content = data.files[key].content;
+            try {
+              Module.FS_createDataFile(
+                '/home/NGUser',
+                key,
+                atob(content).split('').map(c => c.charCodeAt(0)),
+                true,
+                true
+              );
+            } catch (e) {
+              console.log(e);
+              $(".em_files_list").empty().append(e.toString());
+            }            
+          }
+        });
+      })
+      .fail(function( e ) {
+        $(".em_files_list").empty().append("GIST GET: " + e.status + " | " + e.statusText);
+      });      
+    } else {
+      ngspice_asmjs_fn(Module);
+    }
+
+  })();
+
 });
