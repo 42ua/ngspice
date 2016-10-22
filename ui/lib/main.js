@@ -413,9 +413,15 @@ $(function () {
         jqconsole_gist_stdin = data.files['stdin'].content.split('\n');
         jqconsole.SetHistory(jqconsole_gist_stdin);
         ngspice_asmjs_fn(Module);
-        Object.keys(data.files).forEach(function (key) {
+        Object.keys(data.files).sort().forEach(function (key) {
           if (key !== 'stdin') {
             var content = data.files[key].content;
+            if (key.startsWith && key.startsWith('show-img')){
+              $('.show_images_list').append($("<img />", {
+                src : "data:image/*;base64," + content,
+                alt: key
+              }));
+            }
             try {
               Module.FS_createDataFile(
                 '/home/NGUser',
