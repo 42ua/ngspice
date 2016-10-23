@@ -86,44 +86,39 @@ EM_Plot_NewViewport(GRAPH *graph)
         return parseInt(canvas.style.height, 10) || canvas.height;
     });
 
-    if (graph->absolute.width) {
-      // /* hardcopying from the scree,
-      //    ie, we are passed a copy of an existing graph */
-      internalerror("EM_Plot_NewViewport graph->absolute.width not implemented.");
+    /* scale space */
+    /* reasonable values, used in gr_ for placement */
+    graph->fontwidth = (FONT_HEIGHT / 2) + 2;
+    graph->fontheight = FONT_HEIGHT;
 
-      /* set to NULL so graphdb doesn't incorrectly de-allocate it */
-      graph->devdep = NULL;
+    EM_ASM_({
+      document.getElementById('ngspice_plot').getContext('2d').font = $0 + 'px sans-serif';
+    }, graph->fontheight);
 
-    } else {
-        /* scale space */
-        /* reasonable values, used in gr_ for placement */
-        graph->fontwidth = (FONT_HEIGHT / 2) + 2;
-        graph->fontheight = FONT_HEIGHT;
+    graph->absolute.width = dispdev->width;
+    graph->absolute.height = dispdev->height;
 
-        EM_ASM_({
-          document.getElementById('ngspice_plot').getContext('2d').font = $0 + 'px sans-serif';
-        }, graph->fontheight);
+    EM_Plot_Clear();
 
-        graph->absolute.width = dispdev->width;
-        graph->absolute.height = dispdev->height;
+    graph->devdep = TMALLOC(EM_Info, 1);
 
-        EM_Plot_Clear();
-
-        graph->devdep = TMALLOC(EM_Info, 1);
-
-        DEVDEP(graph).isopen = FALSE;
-    }
+    DEVDEP(graph).isopen = FALSE;
 
     return (0);
 }
 
+
 void EM_Plot_redraw() {
+  // try avoid segmentation fault (if currentgraph == NULL)
+  // http://stackoverflow.com/questions/21964120
+  // http://stackoverflow.com/questions/459743
   // try avoid infinite recursion (if any occurs in gr_redraw)
-  if (!DEVDEP(currentgraph).isopen) {
+  if (currentgraph && currentgraph->devdep && !DEVDEP(currentgraph).isopen) {
     DEVDEP(currentgraph).isopen = TRUE;
     gr_redraw(currentgraph);
   }
 }
+
 
 int
 EM_Plot_Close(void)
@@ -160,6 +155,7 @@ EM_Plot_DrawLine(int x1, int y1, int x2, int y2)
     return 0;
 }
 
+
 static void
 linear_arc(int x0, int y0, int radius, double theta, double delta_theta)
 /* x coordinate of center */
@@ -195,6 +191,7 @@ linear_arc(int x0, int y0, int radius, double theta, double delta_theta)
         EM_Plot_DrawLine(x1, y1, x2, y2);
     }
 }
+
 
 /*
  * Notes:
@@ -336,7 +333,6 @@ EM_Plot_SetColor(int colorid)
 int
 EM_Plot_Update(void)
 {
- 
     return 0;
 }
 
@@ -356,9 +352,9 @@ EM_Plot_Clear(void)
     return 0;
 }
 
+
 int
 EM_Plot_Input(REQUEST *request, RESPONSE *response)
 {
-
     return 0;
 }

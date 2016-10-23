@@ -82,6 +82,7 @@ rm -r emcc_asset_dir/helpdir
 cp bin/ngspice ngspice.bc
 
 # https://palant.de/2016/02/05/compiling-c-to-javascript-emscripten-vs-cheerp
+# https://kripken.github.io/emscripten-site/docs/porting/Debugging.html
 emcc $1 ../emcc-build/ngspice.bc \
   --preload-file ../emcc-build/emcc_asset_dir@/home/src/emcc-build/share/ngspice/ \
   --memory-init-file 0 \
