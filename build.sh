@@ -50,7 +50,7 @@ if [ ! -d "ngspice-26" ]; then
     --prefix=/home/src/emcc-build
 
   sed -i '/#define HAVE__PROC_MEMINFO 1/d' src/include/ngspice/config.h
-  sed -i 's!./ngmakeidx$(EXEEXT) -o ngspice.idx $(srcdir)/ngspice.txt!cp ngmakeidx$(EXEEXT) ngmakeidx$(EXEEXT).bc\n\temcc -O2 ngmakeidx$(EXEEXT).bc --pre-js ../../emcc-build/emcc-pre-node-fs.js -o ngmakeidx.js\n\tnode ngmakeidx$(EXEEXT).js -o ngspice.idx $(srcdir)/ngspice.txt!' src/Makefile
+  sed -i 's!^\t./ngmakeidx$(EXEEXT) -o ngspice.idx $(srcdir)/ngspice.txt!\tcp ngmakeidx$(EXEEXT) ngmakeidx$(EXEEXT).bc\n\temcc -O2 --memory-init-file 0 ngmakeidx$(EXEEXT).bc --pre-js ../../emcc-build/emcc-pre-node-fs.js -o ngmakeidx.js\n\tnode ngmakeidx$(EXEEXT).js -o ngspice.idx $(srcdir)/ngspice.txt!' src/Makefile
 
   mkdir -p ../emcc-build/
 
@@ -60,7 +60,12 @@ if [ ! -d "ngspice-26" ]; then
       FS.mkdir("root");
       FS.mount(NODEFS, { root: "/" }, "root");
       FS.chdir("root/" + process.cwd());
-    }' > ../emcc-build/emcc-pre-node-fs.js
+      Object.keys(process.env).forEach(function(key) {
+        if (key.startsWith("ngspice_hack_set_env")){
+          ENV[key.slice(20)] = process.env[key];
+        }
+      });
+    };' > ../emcc-build/emcc-pre-node-fs.js
 
   cd -
 
